@@ -1,0 +1,27 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio connected to my website.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "pm2": "^2.7.2"
+  },
+  "scripts": {
+    "restart": "pm2 startOrRestart ecosystem.config.js",
+    "deploy": "pm2 deploy ecosystem.config.js production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Be3N2/Portfolio.git"
+  },
+  "author": "Be3N2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Be3N2/Portfolio/issues"
+  },
+  "homepage": "https://github.com/Be3N2/Portfolio#readme"
+}
