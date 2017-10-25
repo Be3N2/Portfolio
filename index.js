@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
+
 app.get('/', function (request, response) {
-  res.send('WORKING')l
+  response.send('WORKING');
 });
 
 app.listen(3000, function() {
