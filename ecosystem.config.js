@@ -7,6 +7,7 @@ module.exports = {
     production: {
       user: 'ubuntu',
       host: 'ec2-52-209-166-225.eu-west-1.compute.amazonaws.com',
+      key: '~/.ssh/id_rsa',
       ref: 'origin/master',
       repo: 'github.com/Be3N2/Portfolio',
       path: '/home/ubuntu/server/code/Portfolio',
