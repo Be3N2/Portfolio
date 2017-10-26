@@ -1,0 +1,143 @@
+
+/*Nav bar*/
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #9ECC8B;
+  border-bottom: 4px #91B283 solid;
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+}
+ul li {
+  float: right;
+  margin-right: 20px;
+  margin-top: .8%;
+}
+ul h4 {
+  float: left;
+  margin-left: 40px;
+  color: white;
+  font-size: 30px;
+  margin-top: .5%;
+}
+li a {
+  display: inline;
+  color: white;
+  text-align: center;
+  font-family: "Verdana";
+  font-size: 20px;
+  padding: 14px 16px;
+}
+li a:hover {
+  color: grey;
+  text-decoration: none;
+}
+
+/*header css */
+.header {
+  background: #9ECC8B;
+  width: 100%;
+  height: 600px;
+}
+.header table {
+  margin: 0 auto;
+  text-align: center;
+}
+.header td {
+  vertical-align: bottom;
+}
+.header h1 {
+  color: white;
+  padding-top: 250px;
+  font-size: 50px;
+}
+
+.myImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+/*main page*/
+.projects {
+  width: 100%;
+  text-align: center;
+  background: white;
+}
+.projects p {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
+  font-family: "Verdana";
+  font-size: 20px;
+}
+.projects h3 {
+  padding-top: 40px;
+}
+
+.imageTable {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 60px;
+  border-collapse: seperate;
+  boder-spacing: 10px;
+  z-index: 0;
+}
+.imageRow {
+  width: 100%;
+  height: 250px;
+  margin: 0;
+  padding: 0;
+}
+.imageRow div {
+  padding: 0;
+  margin: 0 auto;
+}
+.inner {
+  height: 200px;
+  width: 90%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.inner:hover {
+  opacity: 0.75;
+}
+
+/*Makes the html clearer if the links are over here*/
+.img1 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22180127_2371815559709804_5626238838164122411_o.jpg?oh=07c85b17dbbea1b3f8224523808badf0&oe=5A4681AC");}
+.img2 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22096162_2371714126386614_5183265825319272908_o.jpg?oh=b1c7eef06d45f4dfb8b3518853df199a&oe=5A856912");}
+.img3 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22051308_2371715999719760_7113845433632824267_o.jpg?oh=7b0ffd8512bfd8a88b2598d3cdc18940&oe=5A8414B4");}
+.img4 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22104358_2371716323053061_6659252958951077412_o.jpg?oh=c4c9e5fe1acebf2264c299849b2ac093&oe=5A3CF3DA");}
+.img5 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22218314_2371724069718953_6716827715878242510_o.jpg?oh=3b0ca6cec659defe5dbe2de33d1f0e1d&oe=5A512BED");}
+.img6 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22096205_2371724399718920_8635140082436414132_o.jpg?oh=b3c8f612e6abaeb5612ea08e4b913a1f&oe=5A867D0E");}
+.img7 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/21273002_2371725709718789_6720679773566931968_o.jpg?oh=7b9a2cc791e30e9828bb3e0e99122d99&oe=5A7E2FA9");}
+.img8 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22095869_2371725939718766_654907851457574648_o.jpg?oh=57993901ac34c31525ceb42aa5dc5370&oe=5A4A0C58");}
+
+/*contact section */
+.contact {
+  width: 100%;
+  height: 250px;
+  background: #9ECC8B;
+  text-align: center;
+}
+.contact h3 {
+  padding-top: 20px;
+}
+.icon:hover {
+  color: black;
+}
+
+.contact h3 {
+  margin-bottom: 40px;
+}
+.symbols {
+  margin-left: 40px;
+}
+
+.fa-4x:hover{
+  color: black;
+  transform: scale(1.2);
+}
