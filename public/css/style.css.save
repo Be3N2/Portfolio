@@ -107,10 +107,10 @@ li a:hover {
 }
 
 /*Makes the html clearer if the links are over here*/
-.img1 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22180127_2371815559709804_5626238838164122411_o.jpg?oh=ba6b7fc5fc29436bfce51a22039a80d7&oe=5ABD28AC");}
+.img1 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22180127_2371815559709804_5626238838164122411_o.jpg?oh=ba6b7fc4fc29436bfce51a22039a80d7&oe=5ABD28AC");}
 .img2 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22096162_2371714126386614_5183265825319272908_o.jpg?oh=b1c7eef06d45f4dfb8b3518853df199a&oe=5A856912");}
-.img3 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22051308_2371715999719760_7113845433632824267_o.jpg?oh=7b0ffd8512bfd8a88b2598d3cdc18940&oe=5A8414B4");}
-.img4 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22104358_2371716323053061_6659252958951077412_o.jpg?oh=0cff44a36a3fd62f6e3f0406c81fa1c9&oe=5AB39ADA");}
+.img3 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22051308_2371715999719760_7113845433632824267_o.jpg?oh=7b0ffd8512bfd8a88b2598d3cdc18940&oe=5A8414B4ABD28AC"ba6b7fc4fc29436bfce51a22039a80d7&oe=5ABD28AC");}
+.img4 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22104358_2371716323053061_6659252958951077412_o.jpg?oh=c4c9e5fe1acebf2264c299849b2ac093&oe=5A3CF3DA");}
 .img5 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22218314_2371724069718953_6716827715878242510_o.jpg?oh=3b0ca6cec659defe5dbe2de33d1f0e1d&oe=5A512BED");}
 .img6 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/22096205_2371724399718920_8635140082436414132_o.jpg?oh=b3c8f612e6abaeb5612ea08e4b913a1f&oe=5A867D0E");}
 .img7 {background-image: url("https://scontent-ort2-2.xx.fbcdn.net/v/t31.0-8/21273002_2371725709718789_6720679773566931968_o.jpg?oh=7b9a2cc791e30e9828bb3e0e99122d99&oe=5A7E2FA9");}
