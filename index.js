@@ -3,16 +3,13 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.get("/", function (request, response) {
+app.get('/', (request, response) => {
   response.sendFile('public/index.html');
 });
 
-app.get("/data", function (request, response) {
-  response.send({"data": 10});
+const server = app.listen(8080, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+
+  console.log(`Example app listening at http://${host}:${port}`);
 });
-
-app.listen(3000, function() {
-  console.log("server running on port 3000");
-});
-
-
