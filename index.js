@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer();
 
 app.use(express.static('public'));
 
@@ -12,6 +14,12 @@ app.post('/postData', bodyParser.json(), (request, response) => {
 	console.log("Received");
 	response.send("Success");
 });
+
+app.post('/formData', upload.none(),(request, response)=> {
+	const formData = request.body;
+	console.log('form data', formData);
+	response.sendStatus(200);
+})
 
 const server = app.listen(8080, () => {
   const host = server.address().address;
