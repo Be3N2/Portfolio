@@ -10,14 +10,9 @@ app.get('/', (request, response) => {
   response.sendFile('public/index.html');
 });
 
-app.post('/postData', bodyParser.json(), (request, response) => {
-	console.log("Received");
-	response.send("Success");
-});
-
 app.post('/formData', upload.any(),(request, response)=> {
-	//const formData = request.body;
-	//console.log('form data', formData);
+	const formData = request.body;
+	console.log('form data', formData);
 	response.sendStatus(200);
 });
 
