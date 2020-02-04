@@ -15,7 +15,7 @@ app.post('/postData', bodyParser.json(), (request, response) => {
 	response.send("Success");
 });
 
-app.post('/formData', upload.none(),(request, response)=> {
+app.post('/formData', upload.any(),(request, response)=> {
 	const formData = request.body;
 	console.log('form data', formData);
 	response.sendStatus(200);
