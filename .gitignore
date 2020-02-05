@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 public/imports
 package-lock.json
+.env
