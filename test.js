@@ -43,12 +43,16 @@ app.get('/', (request, response) => {
  	response.sendFile('public/index.html');
 });
 
+app.get('/search', (request, response) => {
+	response.sendFile('public/lookup.html', { root: __dirname });
+});
+
 app.get('/test', (request, response) => {
 	var collection = db.collection("data");
 	var promise = collection.insertOne(test);
 
 	promise.then(result => console.log(`Successfully inserted item with _id: ${result.insertedId}`))
-  		   .catch(err => console.error(`Failed to insert item: ${err}`))
+  		   .catch(err => console.error(`Failed to insert item: ${err}`));
 	
 	response.send("Success");
 });
@@ -64,3 +68,20 @@ app.post('/formData', upload.any(),(request, response)=> {
 	//respond with success
 	response.sendStatus(200);
 });
+
+app.post('/lookup/', express.urlencoded(),  (request, response) => {
+	const participantID = parseInt(request.body.ParticipantID);
+
+	var collection = db.collection("data");
+	var promise = collection.findOne({"ParticipantID": participantID});
+
+	promise.then((result) =>  {
+		if (result) response.send(result);
+		else response.send("Not found");
+	})
+	   		.catch((err) => {
+	   	console.error(`Error occured when finding item with participant id: ${participantID}`);
+	   	response.send("ERROR");
+	});
+
+})
