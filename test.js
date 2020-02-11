@@ -49,6 +49,8 @@ app.get('/search', (request, response) => {
 });
 
 app.get('/test', (request, response) => {
+	response.send("Route Currently Deactivatd");
+	/*
 	var separatedData = coreFunctions.processData(test);
 	//response.send(separatedData);
 	for (var i = 0; i < separatedData.length; i++) {
@@ -73,7 +75,7 @@ app.get('/test', (request, response) => {
 		response.send("Failed");
 	});
 	
-	
+	*/
 	
 });
 

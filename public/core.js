@@ -1,5 +1,8 @@
 
 var loadedData = [];
+var chartOn = false;
+window.w = 800;
+window.h = 300;
 
 $("#Search").click(function() {
 	var ParticipantID = $("#ParticipantID").val();
@@ -10,9 +13,12 @@ $("#Search").click(function() {
 				console.log(data);
 				//time to populate the data into the rest of the page
 				var $dropdown = $("#failTimeSelector");
-				
-				$(".FailSelectorContainer").toggle(true);
+				$dropdown.empty();
 
+				$(".FailSelectorContainer").toggle(true);
+				
+				$dropdown.append("<option hidden disabled selected value> -- select an option -- </option>");
+				
 				$.each(data, function(i) {
 				    $dropdown.append($("<option />").val(i).text("Fail Time " + data[i]["Fail Time"]));
 				});
@@ -22,21 +28,66 @@ $("#Search").click(function() {
 		});
 
 	$("#Search").attr("disabled", true);
-	setTimeout(function() {  $("#Search").removeAttr("disabled"); }, 10000);
+	setTimeout(function() {$("#Search").removeAttr("disabled");}, 10000);
 });
 
+$("#failTimeSelector").change(function() {
+	var selectedNum = $("#failTimeSelector").val();
 
-
-
-window.w = 800;
-window.h = 300;
-//import {drawSteeringChart} from './steering.js';
-
-const chart = d3.select("#chart")
+	//if chart is hidden, display now
+	$("#chart").toggle(true);
+	$("#chart").empty();
+	//render the appropriate d3 charts
+	const chart = d3.select("#chart")
               .append("svg")
               .attr("width", w)
               .attr("height", h)
               .attr("class","chart");
+  	
+  	drawData(chart, loadedData[selectedNum]["Brake"]);
+});
+
+
+
+function drawData(chart, data) {
+	let padding = 30;
+
+	var maxData = d3.max(data);
+
+	var yScale = d3.scaleLinear()
+		.domain([0, maxData])
+		.range([h-padding, padding]);
+
+	var xScale = d3.scaleLinear()
+	      .domain([0, data.length])
+	      .range([padding, w-padding]);
+
+	var yAxis = d3.axisLeft()
+			.scale(yScale);
+
+	var xAxis = d3.axisBottom()
+			.scale(xScale);
+
+	chart.append('g')
+		.attr('transform', 'translate('+padding+',0)')
+		.call(yAxis);
+
+	chart.append("g")
+	      .attr("transform", "translate(0," + (h-padding )+ ")")
+	      .call(xAxis);
+
+	chart.append("path")
+	  .datum(data)
+	  .attr("fill", "none")
+	  .attr("stroke", "steelblue")
+	  .attr("stroke-width", 1.5)
+	  .attr("id", "speed")
+	  .attr("d", d3.line()
+	    .x(function(d,i) {return xScale(i) })
+	    .y(function(d) { return yScale(d) })
+	);
+}
+
 /*
 d3.request("./assets/Data3Test.csv")
 		.mimeType("text/csv")
@@ -50,43 +101,6 @@ d3.request("./assets/Data3Test.csv")
 			return formattedArr;
 		})
 		.get(function(data) {
-
-			let padding = 30;
-
-			var maxSpeed = d3.max(data, datum => datum[1]);
-			
-			var yScale = d3.scaleLinear()
-				.domain([0, maxSpeed])
-				.range([h-padding, padding]);
-			
-			var xScale = d3.scaleLinear()
-			      .domain([0, data.length])
-			      .range([padding, w-padding]);
-
-			var yAxis = d3.axisLeft()
-					.scale(yScale);
-
-			var xAxis = d3.axisBottom()
-					.scale(xScale);
-
-			chart.append('g')
-				.attr('transform', 'translate('+padding+',0)')
-				.call(yAxis);
-
-			chart.append("g")
-			      .attr("transform", "translate(0," + (h-padding )+ ")")
-			      .call(xAxis);
-
-			chart.append("path")
-		      .datum(data)
-		      .attr("fill", "none")
-		      .attr("stroke", "steelblue")
-		      .attr("stroke-width", 1.5)
-		      .attr("id", "speed")
-		      .attr("d", d3.line()
-		        .x(function(d,i) {return xScale(i) })
-		        .y(function(d) { return yScale(d[1]) })
-		    );
 
 			var maxBrake = d3.max(data, datum => datum[2]);
 
