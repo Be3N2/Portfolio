@@ -55,19 +55,42 @@ app.get('/test', (request, response) => {
 		separatedData[i]["Decel"] = coreFunctions.calcDecel(separatedData[i]["Speed"]);
 		separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["Current/Next-Node-Pos-X"],separatedData[i]["Current/Next-Node-Pos-Z"]);
 		separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
+		separatedData[i]["Participant ID"] = 1;
 	}
 
-	response.send(separatedData);
+	//response.send(separatedData);
 
-	/*
-	var collection = db.collection("data");
-	var promise = collection.insertOne(test);
-
-	promise.then(result => console.log(`Successfully inserted item with _id: ${result.insertedId}`))
-  		   .catch(err => console.error(`Failed to insert item: ${err}`));
 	
-	response.send("Success");
-	*/
+	var collection = db.collection("data");
+	var promise = collection.insertMany(separatedData);
+
+	promise.then((result) => {
+		console.log(`Successfully n items inserted: ${result.insertedCount}`)
+		response.send("Success");	
+	})
+	.catch((err) => {
+		console.error(`Failed to insert item: ${err}`)
+		response.send("Failed");
+	});
+	
+	
+	
+});
+
+app.get('/display', (request, response) => {
+ 	response.sendFile('public/display.html', { root: __dirname });
+});
+
+app.get('/lookup/',  (request, response) => {
+	//jquery get requests send data in query
+
+	const participantID = parseInt(request.query.ParticipantID);
+	var collection = db.collection("data");
+	collection.find({"Participant ID": participantID}).toArray(function(err, result) {
+		if (err) throw err;
+		response.send(result);
+	});
+
 });
 
 app.post('/formData', upload.any(),(request, response)=> {
@@ -81,19 +104,3 @@ app.post('/formData', upload.any(),(request, response)=> {
 	response.sendStatus(200);
 });
 
-app.post('/lookup/', express.urlencoded(),  (request, response) => {
-	const participantID = parseInt(request.body.ParticipantID);
-
-	var collection = db.collection("data");
-	var promise = collection.findOne({"ParticipantID": participantID});
-
-	promise.then((result) =>  {
-		if (result) response.send(result);
-		else response.send("Not found");
-	})
-	   		.catch((err) => {
-	   	console.error(`Error occured when finding item with participant id: ${participantID}`);
-	   	response.send("ERROR");
-	});
-
-})

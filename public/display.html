@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css"href="css/display.css">
+
+</head>
+<body>
+	
+	<div>
+		<label>Participant Number</label>
+		<input type="number" id="ParticipantID" placeholder="10" min="1" oninput="validity.valid||(value='');" />
+
+		<button id="Search">Search</button>
+	</div>
+	<div>
+		<label>Select Fail Time</label>
+		<select id="failTimeSelector" disabled="true">
+		</select>
+	</div>
+
+	<section id="chart">
+		<div id="controls">
+			<button onclick="toggleSpeed()">Speed</button>
+			<button onclick="toggleGas()">Gas</button>
+			<button onclick="toggleBrake()">Brake</button>
+			<button onclick="toggleSteering()">Steering</button>
+			<button onclick="toggleCos()">Cosine</button>
+		</div>
+	</section>
+	<section id="steering">
+		
+	</section>
+
+	<script src="steering.js"></script>
+	<script src="core.js"></script>
+	<!--<script src="button.js"></script>-->
+</body>
+</html>
