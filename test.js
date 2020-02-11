@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const multer = require('multer');
 const upload = multer();
+const coreFunctions = require("./functions");
 
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://"+ process.env.DB_USER + ":"+ process.env.DB_PASS +"@cluster0-fxflw.mongodb.net/test?retryWrites=true&w=majority";
@@ -48,6 +49,17 @@ app.get('/search', (request, response) => {
 });
 
 app.get('/test', (request, response) => {
+	var separatedData = coreFunctions.processData(test);
+	//response.send(separatedData);
+	for (var i = 0; i < separatedData.length; i++) {
+		separatedData[i]["Decel"] = coreFunctions.calcDecel(separatedData[i]["Speed"]);
+		separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["Current/Next-Node-Pos-X"],separatedData[i]["Current/Next-Node-Pos-Z"]);
+		separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
+	}
+
+	response.send(separatedData);
+
+	/*
 	var collection = db.collection("data");
 	var promise = collection.insertOne(test);
 
@@ -55,6 +67,7 @@ app.get('/test', (request, response) => {
   		   .catch(err => console.error(`Failed to insert item: ${err}`));
 	
 	response.send("Success");
+	*/
 });
 
 app.post('/formData', upload.any(),(request, response)=> {
@@ -62,7 +75,6 @@ app.post('/formData', upload.any(),(request, response)=> {
 	console.log('form data', formData);
 	
 	//process the data
-
 	//submit to mongodb
 
 	//respond with success
