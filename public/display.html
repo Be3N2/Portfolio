@@ -9,19 +9,19 @@
 </head>
 <body>
 	
-	<div>
+	<div class="searchContainer">
 		<label>Participant Number</label>
 		<input type="number" id="ParticipantID" placeholder="10" min="1" oninput="validity.valid||(value='');" />
 
 		<button id="Search">Search</button>
 	</div>
-	<div>
+	<div class="FailSelectorContainer invisible">
 		<label>Select Fail Time</label>
-		<select id="failTimeSelector" disabled="true">
+		<select id="failTimeSelector">
 		</select>
 	</div>
 
-	<section id="chart">
+	<section id="chart" class="invisible">
 		<div id="controls">
 			<button onclick="toggleSpeed()">Speed</button>
 			<button onclick="toggleGas()">Gas</button>
@@ -30,7 +30,7 @@
 			<button onclick="toggleCos()">Cosine</button>
 		</div>
 	</section>
-	<section id="steering">
+	<section id="steering" class="invisible">
 		
 	</section>
 

@@ -1,6 +1,11 @@
 
-.chart {
-	 border: 1px solid lightgray;
+.invisible {
+	display: none;
+}
+
+
+#chart {
+	border: 1px solid lightgray;
 }
 
 #controls {

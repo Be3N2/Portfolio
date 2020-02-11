@@ -5,15 +5,20 @@ $("#Search").click(function() {
 	var ParticipantID = $("#ParticipantID").val();
 	$.get("lookup", {"ParticipantID": ParticipantID})
 		.done(function( data ) {
-			loadedData = data;
-			console.log(data);
-			//time to populate the data into the rest of the page
-			var $dropdown = $("#failTimeSelector");
-			$("#failTimeSelector").attr("disabled", false);
+			if (data.length > 0) {
+				loadedData = data;
+				console.log(data);
+				//time to populate the data into the rest of the page
+				var $dropdown = $("#failTimeSelector");
+				
+				$(".FailSelectorContainer").toggle(true);
 
-			$.each(data, function(i) {
-			    $dropdown.append($("<option />").val(i).text("Fail Time " + data[i]["Fail Time"]));
-			});
+				$.each(data, function(i) {
+				    $dropdown.append($("<option />").val(i).text("Fail Time " + data[i]["Fail Time"]));
+				});
+			} else {
+				alert("No results");
+			}
 		});
 
 	$("#Search").attr("disabled", true);
