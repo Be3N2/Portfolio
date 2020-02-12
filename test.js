@@ -49,12 +49,13 @@ app.get('/search', (request, response) => {
 });
 
 app.get('/test', (request, response) => {
-	response.send("Route Currently Deactivatd");
-	/*
+	//response.send("Route Currently Deactivatd");
+	
+	
 	var separatedData = coreFunctions.processData(test);
 	//response.send(separatedData);
 	for (var i = 0; i < separatedData.length; i++) {
-		separatedData[i]["Decel"] = coreFunctions.calcDecel(separatedData[i]["Speed"]);
+		separatedData[i]["DecelData"] = coreFunctions.calcDecel(separatedData[i]["Speed"], separatedData[i]["Player PositionX"], separatedData[i]["Player PositionZ"]);
 		separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["Current/Next-Node-Pos-X"],separatedData[i]["Current/Next-Node-Pos-Z"]);
 		separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
 		separatedData[i]["Participant ID"] = 1;
@@ -75,7 +76,7 @@ app.get('/test', (request, response) => {
 		response.send("Failed");
 	});
 	
-	*/
+	
 	
 });
 

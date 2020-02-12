@@ -48,8 +48,14 @@ $("#failTimeSelector").change(function() {
               .attr("class","chart");
   	
   	drawAxis(chart, loadedData[selectedNum]["Brake"].length, 0, 100);
-  	drawData(chart, loadedData[selectedNum]["Brake"], 0, 100);
-  	drawData(chart, loadedData[selectedNum]["Speed"], 0, 100);
+  	drawData(chart, loadedData[selectedNum]["Brake"], 0, 100, "steelblue");
+  	drawData(chart, loadedData[selectedNum]["Speed"], 0, 100, "red");
+  	drawData(chart, loadedData[selectedNum]["Steering"], -1, 1, "darkgreen");
+
+  	if (loadedData[selectedNum]["SteeringData"].cosineApprox.length > 0) {
+  		drawSteeringAxis(chart, loadedData[selectedNum]["SteeringData"].cosineApprox, -1, 1);
+  		drawData(chart, loadedData[selectedNum]["SteeringData"].cosineApprox, -1, 1, "green");
+  	}
 });
 
 function drawAxis(chart, length, min, max) {
@@ -76,7 +82,44 @@ function drawAxis(chart, length, min, max) {
 	      .call(xAxis);
 }
 
-function drawData(chart, data, min, max) {
+function drawSteeringAxis(chart, data, min, max) {
+	var yScale = d3.scaleLinear()
+		.domain([min, max])
+		.range([h-padding, padding]);
+
+	var xScale = d3.scaleLinear()
+	      .domain([0, data.length])
+	      .range([padding, w-padding]);
+
+	var yAxis = d3.axisLeft()
+			.scale(yScale);
+
+	var xAxis = d3.axisBottom()
+			.scale(xScale);
+
+	chart.append("path")
+		      .datum(data)
+		      .attr("fill", "none")
+		      .attr("stroke", "lightgrey")
+		      .attr("stroke-width", 1.5)
+		      .attr("id", "steering")
+		      .attr("d", d3.line()
+		        .x(function(d,i) {return xScale(i) })
+		        .y(function(d) { return yScale(0.15) })
+		 	  ); 
+	chart.append("path")
+		      .datum(data)
+		      .attr("fill", "none")
+		      .attr("stroke", "lightgrey")
+		      .attr("stroke-width", 1.5)
+		      .attr("id", "steering")
+		      .attr("d", d3.line()
+		        .x(function(d,i) {return xScale(i) })
+		        .y(function(d) { return yScale(-0.15) })
+		        ); 
+}
+
+function drawData(chart, data, min, max, color) {
 
 	var yScale = d3.scaleLinear()
 		.domain([min, max])
@@ -89,7 +132,7 @@ function drawData(chart, data, min, max) {
 	chart.append("path")
 	  .datum(data)
 	  .attr("fill", "none")
-	  .attr("stroke", "steelblue")
+	  .attr("stroke", color)
 	  .attr("stroke-width", 1.5)
 	  .attr("id", "speed")
 	  .attr("d", d3.line()

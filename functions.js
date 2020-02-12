@@ -131,7 +131,7 @@ processData: function(testData) {
 
 
 
-calcDecel: function(speed) {
+calcDecel: function(speed, playerX, playerZ) {
 	const DATA_RATE = .15; // 150 ms = .15 seconds
 	const MPHtoFTS = 1.4666666667;
 
@@ -142,6 +142,9 @@ calcDecel: function(speed) {
 	var startPoint;
 
 	var sections = [];
+	var playerXsections = [];
+	var playerZsections = [];
+
 	for (var i = 1; i < speed.length - 1; i++) {
 		if (speed[i] < speed[i-1] && !boolSaving && speed[i] > 0.25) {
 			//decelerating!
@@ -152,6 +155,8 @@ calcDecel: function(speed) {
 			//consider them stopped or || they stopped decelerating and sped up!
 			//either way split the array for the first deceleration period
 			sections.push(speed.slice(startPoint, i + 1));
+			playerXsections.push(playerX.slice(startPoint, i+1));
+			playerZsections.push(playerZ.slice(startPoint, i+1));
 			boolSaving = false;
 		}
 		//might consider saving the last deceleration period as well?
@@ -161,10 +166,14 @@ calcDecel: function(speed) {
 	for (var i = sections.length - 1; i >= 0; i--) {
 		if (sections[i].length < 7) {
 			sections.splice(i, 1); //splice removes elements from the middle of the array, in this case 1 element
+			playerXsections.slice(i, 1);
+			playerZsections.slice(i, 1);
 		}
 	}
 
 	//console.log(sections);
+	//new obj to store both decelerations
+	var returnDecelObj = {};
 
 	var decelerations = [];
 	for (var i = 0; i < sections.length; i++) {
@@ -178,8 +187,26 @@ calcDecel: function(speed) {
 	}
 
 	var meanDecelerations = this.mean(decelerations);
+	returnDecelObj["meanDecelSpeedBased"] = meanDecelerations;
 
-	return meanDecelerations;
+	//new method include Dr. Arslanyilmaz's technique
+	var decelDistanceBased = [];
+	for (var i = 0; i < sections.length; i++) {
+		// for each section find distance, use length to find time
+		// then calculate based on formula distance / s^2
+		var diffX = playerXsections[i][playerXsections[i].length-1] - playerXsections[i][0];
+		var diffZ = playerZsections[i][playerZsections[i].length-1] - playerZsections[i][0];
+		var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffZ, 2));
+
+		var time = sections.length * DATA_RATE;
+		var decelDistance = distance / (Math.pow(time, 2));
+		decelDistanceBased.push(decelDistance);
+	}
+
+	var meanDistanceBased = this.mean(decelDistanceBased);
+	returnDecelObj["meanDecelDistanceBased"] = meanDistanceBased;
+
+	return returnDecelObj;
 },
 
 //takes playerX array, playerZ array, nodeX array, nodeZ array returns an array of lateral distances
@@ -339,7 +366,7 @@ genCurvesAndError: function(steeringData) {
 		cosineCurve.shift();
 		cosineCurve.pop();
 
-		drivingDataObj["cosineApprox"].push(cosineCurve);
+		drivingDataObj["cosineApprox"] = cosineCurve;
 		var error = this.rootMeanSquare(turnData, cosineCurve);
 		drivingDataObj["error"].push(error);
 	}
