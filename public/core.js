@@ -1,8 +1,11 @@
 
 var loadedData = [];
 var chartOn = false;
+
+//d3 important values
 window.w = 800;
 window.h = 300;
+let padding = 30;
 
 $("#Search").click(function() {
 	var ParticipantID = $("#ParticipantID").val();
@@ -44,22 +47,18 @@ $("#failTimeSelector").change(function() {
               .attr("height", h)
               .attr("class","chart");
   	
-  	drawData(chart, loadedData[selectedNum]["Brake"]);
+  	drawAxis(chart, loadedData[selectedNum]["Brake"].length, 0, 100);
+  	drawData(chart, loadedData[selectedNum]["Brake"], 0, 100);
+  	drawData(chart, loadedData[selectedNum]["Speed"], 0, 100);
 });
 
-
-
-function drawData(chart, data) {
-	let padding = 30;
-
-	var maxData = d3.max(data);
-
+function drawAxis(chart, length, min, max) {
 	var yScale = d3.scaleLinear()
-		.domain([0, maxData])
+		.domain([min, max])
 		.range([h-padding, padding]);
 
 	var xScale = d3.scaleLinear()
-	      .domain([0, data.length])
+	      .domain([0, length])
 	      .range([padding, w-padding]);
 
 	var yAxis = d3.axisLeft()
@@ -75,6 +74,17 @@ function drawData(chart, data) {
 	chart.append("g")
 	      .attr("transform", "translate(0," + (h-padding )+ ")")
 	      .call(xAxis);
+}
+
+function drawData(chart, data, min, max) {
+
+	var yScale = d3.scaleLinear()
+		.domain([min, max])
+		.range([h-padding, padding]);
+
+	var xScale = d3.scaleLinear()
+	      .domain([0, data.length])
+	      .range([padding, w-padding]);
 
 	chart.append("path")
 	  .datum(data)
