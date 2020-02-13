@@ -333,7 +333,11 @@ genCurvesAndError: function(steeringData) {
 		direction = direction[]
 		turnData = []
 		cosineApprox = [[],[]]
-		error = [] 
+		error = [] for each cosine curve
+		meanError = y
+		stdError = z
+		fullApprox = []
+
 	} 
 	*/
 	var drivingDataObj = this.determineTurns(steeringData);
@@ -345,7 +349,7 @@ genCurvesAndError: function(steeringData) {
 		//for every turn in the obj find cosine wave, and error
 
 		var midpoint = Math.floor(drivingDataObj.length[i] / 2);
-		var turnData = drivingDataObj["turnData"].slice(drivingDataObj.start[i], drivingDataObj.end[i] + 1);
+		var turnData = drivingDataObj["turnData"].slice(drivingDataObj.start[i], drivingDataObj.end[i]);
 		var peak = this.max(turnData);
 
 		if (drivingDataObj.direction[i] == -1) {
@@ -357,24 +361,34 @@ genCurvesAndError: function(steeringData) {
 		//console.log("midpoint", midpoint)
 		////console.log("leftSide", leftSide)
 
-		var rightSide = this.buildCosArr(peak, 0, drivingDataObj["length"][i] - midpoint + 2)
-
-		////console.log("actual length", drivingDataObj["length"][i]);
-		////console.log("generated length", drivingDataObj["length"][i]);
+		var rightSide = this.buildCosArr(peak, 0, drivingDataObj["length"][i] - midpoint + 1)
 
 		var cosineCurve = leftSide.concat(rightSide);
-		////console.log("concat length", cosineCurve.length - 2);
-		////console.log("turnData length", turnData.length);
 
 		//delete the leading and final 0
 		cosineCurve.shift();
 		cosineCurve.pop();
 
-		drivingDataObj["cosineApprox"] = cosineCurve;
+		drivingDataObj["cosineApprox"].push(cosineCurve);
 		var error = this.rootMeanSquare(turnData, cosineCurve);
 		drivingDataObj["error"].push(error);
 	}
 
+	if (drivingDataObj["start"].length > 0) {
+		//find mean error, std error
+		drivingDataObj["meanError"] = this.mean(drivingDataObj["error"]);
+		drivingDataObj["stdError"] = this.standardDev(drivingDataObj["error"]);
+
+		//complete a full length curve for the drawing
+		let emptyArray = new Array(drivingDataObj["turnData"].length).fill(0);
+		for (var i = 0; i < drivingDataObj["start"].length; i++) {
+			//Array.prototype.splice.apply(emptyArray, [drivingDataObj["start"][i], drivingDataObj["end"][i]].concat(drivingDataObj["cosineApprox"][i]));
+			for (var j = 0; j < drivingDataObj["length"][i]; j++) {
+				emptyArray[j + drivingDataObj["start"][i]] = drivingDataObj["cosineApprox"][i][j];
+			}
+		}
+		drivingDataObj["fullApprox"] = emptyArray;
+	}
 	return drivingDataObj;
 },
 
@@ -386,16 +400,16 @@ determineTurns: function(steeringData) {
 	var direction = []; //1 if left -1 of rit
 	var turnCount = 0;
 	for (var i = 0; i < steeringData.length; i++) {
-		if (steeringData[i] > 0.15 || steeringData < -0.15) {
+		if (steeringData[i] > 0.05 || steeringData[i] < -0.05) {
 			if (!boolStarted) {
 				start[turnCount] = i;
 				boolStarted = true;
 				direction[turnCount] = 1;
-				if (steeringData[i] < -0.15) direction[turnCount] = -1;
+				if (steeringData[i] < -0.05) direction[turnCount] = -1;
 			}
 		} else if (boolStarted) {
 			//stop
-			end[turnCount] = i - 1;
+			end[turnCount] = i;
 			boolStarted = false;
 			length[turnCount] = end[turnCount] - start[turnCount];
 			turnCount += 1;

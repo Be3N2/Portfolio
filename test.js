@@ -75,8 +75,8 @@ app.get('/test', (request, response) => {
 		console.error(`Failed to insert item: ${err}`)
 		response.send("Failed");
 	});
-	*/
 	
+	*/
 	
 	
 });

@@ -54,8 +54,8 @@ $("#failTimeSelector").change(function() {
 
   	drawSteeringAxis(chart, loadedData[selectedNum]["Steering"], -1, 1); 
 
-  	if (loadedData[selectedNum]["SteeringData"].cosineApprox.length > 0) {
-  		drawData(chart, loadedData[selectedNum]["SteeringData"].cosineApprox, -1, 1, "green");
+  	if (loadedData[selectedNum]["SteeringData"].fullApprox) {
+  		drawData(chart, loadedData[selectedNum]["SteeringData"].fullApprox, -1, 1, "green");
   	}
 });
 
@@ -110,7 +110,7 @@ function drawSteeringAxis(chart, data, min, max) {
 		      .attr("id", "steering")
 		      .attr("d", d3.line()
 		        .x(function(d,i) {return xScale(i) })
-		        .y(function(d) { return yScale(0.15) })
+		        .y(function(d) { return yScale(0.05) })
 		 	  ); 
 	chart.append("path")
 		      .datum(data)
@@ -120,7 +120,7 @@ function drawSteeringAxis(chart, data, min, max) {
 		      .attr("id", "steering")
 		      .attr("d", d3.line()
 		        .x(function(d,i) {return xScale(i) })
-		        .y(function(d) { return yScale(-0.15) })
+		        .y(function(d) { return yScale(-0.05) })
 		        ); 
     
     chart.append('g')
