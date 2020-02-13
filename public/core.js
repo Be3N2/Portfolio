@@ -2,6 +2,8 @@
 var loadedData = [];
 var chartOn = false;
 
+var precision = 3;
+
 //d3 important values
 window.w = 800;
 window.h = 300;
@@ -15,6 +17,8 @@ $("#Search").click(function() {
 				loadedData = data;
 				console.log(data);
 				//time to populate the data into the rest of the page
+				populateTableData(data);
+
 				var $dropdown = $("#failTimeSelector");
 				$dropdown.empty();
 
@@ -34,9 +38,104 @@ $("#Search").click(function() {
 	setTimeout(function() {$("#Search").removeAttr("disabled");}, 10000);
 });
 
+function mean(dataArray) {
+	let sum = 0;
+	for (let i = 0; i < dataArray.length; i++) {
+		sum += dataArray[i];
+	}
+	return sum / dataArray.length;
+}
+
+function toFixed(value, precision) {
+    var power = Math.pow(10, precision || 0);
+    return String(Math.round(value * power) / power);
+}
+
+function populateTableData(data) {
+	//use loadedData to populate the participant table
+	$table = $(".ParticipantResultsTable");
+	$table.toggle(true);
+	//calculate all values per category
+	var failTime3 = failTimeData(data, 3);
+	var failTime5 = failTimeData(data, 5);
+	var failTime7 = failTimeData(data, 7);
+
+	//first clear old data if it exists
+	$table.find(".tableGen").remove();
+
+	//populate new data
+	$table.find("#meanDecelerationFPS").append("<td class='tableGen'>" + failTime3["meanDecelFPS"] +"</td>");
+	$table.find("#meanDecelerationFPS").append("<td class='tableGen'>" + failTime5["meanDecelFPS"] +"</td>");
+	$table.find("#meanDecelerationFPS").append("<td class='tableGen'>" + failTime7["meanDecelFPS"] +"</td>");
+
+	$table.find("#meanDecelerationMPS").append("<td class='tableGen'>" + failTime3["meanDecelMPS"] +"</td>");
+	$table.find("#meanDecelerationMPS").append("<td class='tableGen'>" + failTime5["meanDecelMPS"] +"</td>");
+	$table.find("#meanDecelerationMPS").append("<td class='tableGen'>" + failTime7["meanDecelMPS"] +"</td>");
+
+	$table.find("#meanLateralPosisition").append("<td class='tableGen'>" + failTime3["meanLateralPosition"] +"</td>");
+	$table.find("#meanLateralPosisition").append("<td class='tableGen'>" + failTime5["meanLateralPosition"] +"</td>");
+	$table.find("#meanLateralPosisition").append("<td class='tableGen'>" + failTime7["meanLateralPosition"] +"</td>");
+
+	$table.find("#SDLP").append("<td class='tableGen'>" + failTime3["meanSDLP"] +"</td>");
+	$table.find("#SDLP").append("<td class='tableGen'>" + failTime5["meanSDLP"] +"</td>");
+	$table.find("#SDLP").append("<td class='tableGen'>" + failTime7["meanSDLP"] +"</td>");
+
+	$table.find("#meanSteeringError").append("<td class='tableGen'>" + failTime3["meanSteeringError"] +"</td>");
+	$table.find("#meanSteeringError").append("<td class='tableGen'>" + failTime5["meanSteeringError"] +"</td>");
+	$table.find("#meanSteeringError").append("<td class='tableGen'>" + failTime7["meanSteeringError"] +"</td>");
+}
+
+function failTimeData(data, time) {
+	//return stats object for that time category
+	/*
+	returnobj = {
+		"meanDecelFPS":
+		"meanDecelMPS"
+		"meanLateralPosition"
+		"meanSDLP"
+		"meanSteeringError"
+	}
+	*/
+	var returnObj = {};
+
+	var meanDecelFPS = [];
+	var meanDecelMPS = [];
+	var meanLateralPosition = [];
+	var meanSDLP = [];
+	var meanSteeringError = [];
+	for (var i = 0; i < data.length; i++) {
+		if (data[i]["Fail Time"] == time) {
+			meanDecelFPS.push(data[i]["DecelData"]["meanDecelSpeedBased"]);
+			meanDecelMPS.push(data[i]["DecelData"]["meanDecelDistanceBased"]);
+			meanLateralPosition.push(data[i]["LateralData"]["MeanLateral"]);
+			meanSDLP.push(data[i]["LateralData"]["SDLP"]);
+			if (data[i]["SteeringData"]["meanError"]) meanSteeringError.push(data[i]["SteeringData"]["meanError"]);
+		}
+	}
+	returnObj.meanDecelFPS = mean(meanDecelFPS).toFixed(precision);
+	returnObj.meanDecelMPS = mean(meanDecelMPS).toFixed(precision);
+	returnObj.meanLateralPosition = mean(meanLateralPosition).toFixed(precision);
+	returnObj.meanSDLP = mean(meanSDLP).toFixed(precision);
+	returnObj.meanSteeringError = mean(meanSteeringError).toFixed(precision);
+	return returnObj;
+}
+
 $("#failTimeSelector").change(function() {
 	var selectedNum = $("#failTimeSelector").val();
 
+	//display calculations
+	var $failData = $(".failTimeData");
+
+	$failData.toggle(true);
+	$failData.find(".meanDecelFPS").text(loadedData[selectedNum]["DecelData"]["meanDecelSpeedBased"].toFixed(precision));
+	$failData.find(".meanDecelMPS").text(loadedData[selectedNum]["DecelData"]["meanDecelDistanceBased"].toFixed(precision));
+	$failData.find(".meanLateral").text(loadedData[selectedNum]["LateralData"]["MeanLateral"].toFixed(precision));
+	$failData.find(".stdLateral").text(loadedData[selectedNum]["LateralData"]["SDLP"].toFixed(precision));
+	if (loadedData[selectedNum]["SteeringData"]["meanError"])
+		$failData.find(".meanSteering").text(loadedData[selectedNum]["SteeringData"]["meanError"].toFixed(precision));
+	else 
+		$failData.find(".meanSteering").text("N/A");
+	//draw chart
 	//if chart is hidden, display now
 	$("#chart").toggle(true);
 	$("#chart").empty();
@@ -46,7 +145,7 @@ $("#failTimeSelector").change(function() {
               .attr("width", w)
               .attr("height", h)
               .attr("class","chart");
-  	
+
   	drawAxis(chart, loadedData[selectedNum]["Brake"].length, 0, 100);
   	drawData(chart, loadedData[selectedNum]["Brake"], 0, 100, "steelblue");
   	drawData(chart, loadedData[selectedNum]["Speed"], 0, 100, "red");
@@ -110,7 +209,7 @@ function drawSteeringAxis(chart, data, min, max) {
 		      .attr("id", "steering")
 		      .attr("d", d3.line()
 		        .x(function(d,i) {return xScale(i) })
-		        .y(function(d) { return yScale(0.05) })
+		        .y(function(d) { return yScale(0.10) })
 		 	  ); 
 	chart.append("path")
 		      .datum(data)
@@ -120,7 +219,7 @@ function drawSteeringAxis(chart, data, min, max) {
 		      .attr("id", "steering")
 		      .attr("d", d3.line()
 		        .x(function(d,i) {return xScale(i) })
-		        .y(function(d) { return yScale(-0.05) })
+		        .y(function(d) { return yScale(-0.10) })
 		        ); 
     
     chart.append('g')

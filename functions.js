@@ -400,20 +400,27 @@ determineTurns: function(steeringData) {
 	var direction = []; //1 if left -1 of rit
 	var turnCount = 0;
 	for (var i = 0; i < steeringData.length; i++) {
-		if (steeringData[i] > 0.05 || steeringData[i] < -0.05) {
+		if (steeringData[i] > 0.10 || steeringData[i] < -0.10) {
 			if (!boolStarted) {
 				start[turnCount] = i;
 				boolStarted = true;
 				direction[turnCount] = 1;
-				if (steeringData[i] < -0.05) direction[turnCount] = -1;
+				if (steeringData[i] < -0.10) direction[turnCount] = -1;
 			}
 		} else if (boolStarted) {
 			//stop
-			end[turnCount] = i;
 			boolStarted = false;
-			length[turnCount] = end[turnCount] - start[turnCount];
-			turnCount += 1;
-			
+
+			if (i - start[turnCount] > 7) { //if turn is longer than a second
+				//extend it on either side about 1 sec
+				end[turnCount] = i+6;
+				start[turnCount] -= 6;
+				if (start[turnCount] < 0) start[turnCount] = 0;
+				if (end[turnCount] > steeringData.length) end[turnCount] = steeringData.length;
+				length[turnCount] = end[turnCount] - start[turnCount];
+				turnCount += 1;
+			} 
+		
 		}
 	}
 	//should it include turning at the end of the simulation?

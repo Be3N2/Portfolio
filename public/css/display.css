@@ -3,6 +3,20 @@
 	display: none;
 }
 
+.ParticipantResultsTable {
+	width: 100%;
+	text-align: left;
+	margin: 0;
+	padding: 20px;
+}
+
+.failTimeTable {
+	width: 50%;
+	text-align: left;
+	margin: 0;
+	padding: 20px;
+}
+
 .secondTicks line {
 	stroke: #92929236;
 }
@@ -15,3 +29,20 @@
 #controls {
 	width: 100%;
 }
+
+.failTimeData {
+
+}
+
+.failTimeData > div {
+	width: 100%;
+}
+
+.failTimeData > div > h1 {
+	font-size: 15px;	
+	min-height: 20px;
+	margin: 0;
+	width: 50%;
+	display:inline;
+}
+

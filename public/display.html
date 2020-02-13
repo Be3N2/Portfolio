@@ -15,12 +15,66 @@
 
 		<button id="Search">Search</button>
 	</div>
+	<div class="ParticipantResultsSection">
+		<table class="ParticipantResultsTable invisible">
+			<tr>
+				<th>Category</th>
+				<th>3 Seconds</th>
+				<th>5 Seconds</th>
+				<th>7 Seconds</th>
+			</tr>
+			<tr id="meanDecelerationFPS">
+				<td>Mean Deceleration f/s<sup>2</sup></td>
+			</tr>
+			<tr id="meanDecelerationMPS">
+				<td>Mean Deceleration m/s<sup>2</sup></td>
+			</tr>
+			<tr id="meanLateralPosisition">
+				<td>Mean Lateral Position</td>
+			</tr>
+			<tr id="SDLP">
+				<td>Standard Deviation of Lateral Position</td>
+			</tr>
+			<tr id="meanSteeringError">
+				<td>Mean Steering Error</td>
+			</tr>
+		</table>
+	</div>
 	<div class="FailSelectorContainer invisible">
 		<label>Select Fail Time</label>
 		<select id="failTimeSelector">
 			<option val="Example">Example</option>
 		</select>
 	</div>
+
+	<section class="failTimeData invisible">
+		<table class="failTimeTable">
+			<tr>
+				<th>Category</th>
+				<th>Value</th>
+			</tr>
+			<tr class="meanDecelData">
+				<td>Mean Deceleration f/s<sup>2</sup></td>
+				<td class="meanDecelFPS"></td>
+			</tr>	
+			<tr class="meanDecelData">
+				<td>Mean Deceleration m/s<sup>2</sup></td>
+				<td class="meanDecelMPS"></td>
+			</tr>	
+			<tr class="meanLateralData">
+				<td>Mean Lateral Position</td>
+				<td class="meanLateral"></td>
+			</tr>	
+			<tr class="stdLateralData">
+				<td>Standard Deviation of Lateral Position</td>
+				<td class="stdLateral"></td>
+			</tr>	
+			<tr class="meanSteeringData">
+				<td>Steering Error</td>
+				<td class="meanSteering"></td>
+			</tr>	
+		</table>
+	</section>
 
 	<section id="chart" class="invisible">
 		<div id="controls">
@@ -31,11 +85,8 @@
 			<button onclick="toggleCos()">Cosine</button>
 		</div>
 	</section>
-	<section id="steering" class="invisible">
-		
-	</section>
-
-	<script src="steering.js"></script>
+	
+	<!--<script src="steering.js"></script>-->
 	<script src="core.js"></script>
 	<!--<script src="button.js"></script>-->
 </body>
