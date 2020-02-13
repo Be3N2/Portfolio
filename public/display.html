@@ -76,18 +76,16 @@
 		</table>
 	</section>
 
-	<section id="chart" class="invisible">
-		<div id="controls">
-			<button onclick="toggleSpeed()">Speed</button>
-			<button onclick="toggleGas()">Gas</button>
-			<button onclick="toggleBrake()">Brake</button>
-			<button onclick="toggleSteering()">Steering</button>
-			<button onclick="toggleCos()">Cosine</button>
+	<div id="controls" class="invisible">
+			<button id="speedToggle">Speed</button>
+			<button id="brakeToggle">Brake</button>
+			<button id="steeringToggle">Steering</button>
+			<button class="invisible" id="approxToggle">Steering Approx</button>
 		</div>
+	<section id="chart" class="invisible">
+		
 	</section>
 	
-	<!--<script src="steering.js"></script>-->
 	<script src="core.js"></script>
-	<!--<script src="button.js"></script>-->
 </body>
 </html>
