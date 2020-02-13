@@ -2,8 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
-const multer = require('multer');
-const upload = multer();
+const bodyParser = requre('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://" + process.env.DB_USER + ":" process.env.DB_PASS + "@cluster0-fxflw.mongodb.net/test?retryWrites=true&w=majority";
 
@@ -15,14 +14,14 @@ app.get('/', (request, response) => {
   response.sendFile('public/index.html');
 });
 
-app.post('/formData', upload.any(),(request, response)=> {
-	const formData = request.body;
-	console.log('form data', formData);
-	client.connect(err => {
-	  const collection = client.db("test").collection("devices");
-	  // perform actions on the collection object
-	  client.close();
-	});
+var urlencodedParser = bodyParser.urlencoded({extended: true});
+app.post('/form', urlencodedParser, (request, response) => {
+	if (request.body) {
+		//console.log(request.body);
+		for (var prop in request.body) {
+			console.log(request.body[prop]);
+		}
+	}
 	response.sendStatus(200);
 });
 

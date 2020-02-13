@@ -52,8 +52,9 @@ $("#failTimeSelector").change(function() {
   	drawData(chart, loadedData[selectedNum]["Speed"], 0, 100, "red");
   	drawData(chart, loadedData[selectedNum]["Steering"], -1, 1, "darkgreen");
 
+  	drawSteeringAxis(chart, loadedData[selectedNum]["Steering"], -1, 1); 
+
   	if (loadedData[selectedNum]["SteeringData"].cosineApprox.length > 0) {
-  		drawSteeringAxis(chart, loadedData[selectedNum]["SteeringData"].cosineApprox, -1, 1);
   		drawData(chart, loadedData[selectedNum]["SteeringData"].cosineApprox, -1, 1, "green");
   	}
 });
@@ -64,7 +65,7 @@ function drawAxis(chart, length, min, max) {
 		.range([h-padding, padding]);
 
 	var xScale = d3.scaleLinear()
-	      .domain([0, length])
+	      .domain([0, parseInt(length*0.15)])
 	      .range([padding, w-padding]);
 
 	var yAxis = d3.axisLeft()
@@ -74,12 +75,19 @@ function drawAxis(chart, length, min, max) {
 			.scale(xScale);
 
 	chart.append('g')
-		.attr('transform', 'translate('+padding+',0)')
+		.attr('transform', 'translate('+ padding+',0)')
 		.call(yAxis);
 
-	chart.append("g")
+	xAxis.tickSize((-1 * h) + padding);
+	xAxis.ticks(parseInt(length*0.15));
+	//xAxis.tickFormat((d, i) => {return d + "s"});
+
+	var g = chart.append("g")
 	      .attr("transform", "translate(0," + (h-padding )+ ")")
+	      .attr("class", "secondTicks")
 	      .call(xAxis);
+	g.selectAll(".tick:first-of-type text").remove();
+	g.selectAll(".tick:last-of-type text").remove();
 }
 
 function drawSteeringAxis(chart, data, min, max) {
@@ -91,11 +99,8 @@ function drawSteeringAxis(chart, data, min, max) {
 	      .domain([0, data.length])
 	      .range([padding, w-padding]);
 
-	var yAxis = d3.axisLeft()
+	var yAxis = d3.axisRight()
 			.scale(yScale);
-
-	var xAxis = d3.axisBottom()
-			.scale(xScale);
 
 	chart.append("path")
 		      .datum(data)
@@ -117,6 +122,10 @@ function drawSteeringAxis(chart, data, min, max) {
 		        .x(function(d,i) {return xScale(i) })
 		        .y(function(d) { return yScale(-0.15) })
 		        ); 
+    
+    chart.append('g')
+				.attr('transform', 'translate('+(w-padding)+',0)')
+				.call(yAxis);
 }
 
 function drawData(chart, data, min, max, color) {

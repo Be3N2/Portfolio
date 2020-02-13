@@ -3,8 +3,12 @@
 	display: none;
 }
 
+.secondTicks line {
+	stroke: #92929236;
+}
 
 #chart {
+	width: 800px;
 	border: 1px solid lightgray;
 }
 

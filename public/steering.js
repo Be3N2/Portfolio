@@ -23,11 +23,13 @@ function drawSteeringChart(data) {
 				  .scale(xScale);
     
     steeringChart.append('g')
-				.attr('transform', 'translate('+padding+',0)')
+				.attr('transform', 'translate('+ (w-padding)+',0)')
+				.attr("id", "steeringOverlay")
 				.call(yAxis);
 
 	steeringChart.append('g')
 				.attr('transform', 'translate(0,' + (h-padding) + ')')
+				.attr("id", "steeringOverlay")
 				.call(xAxis);
 
  	steeringChart.append("path")

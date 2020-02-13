@@ -61,9 +61,9 @@ app.get('/test', (request, response) => {
 		separatedData[i]["Participant ID"] = 1;
 	}
 
-	//response.send(separatedData);
+	response.send(separatedData);
 
-	
+	/*
 	var collection = db.collection("data");
 	var promise = collection.insertMany(separatedData);
 
@@ -75,6 +75,7 @@ app.get('/test', (request, response) => {
 		console.error(`Failed to insert item: ${err}`)
 		response.send("Failed");
 	});
+	*/
 	
 	
 	

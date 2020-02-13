@@ -166,12 +166,14 @@ calcDecel: function(speed, playerX, playerZ) {
 	for (var i = sections.length - 1; i >= 0; i--) {
 		if (sections[i].length < 7) {
 			sections.splice(i, 1); //splice removes elements from the middle of the array, in this case 1 element
-			playerXsections.slice(i, 1);
-			playerZsections.slice(i, 1);
+			playerXsections.splice(i, 1);
+			playerZsections.splice(i, 1);
 		}
 	}
-
-	//console.log(sections);
+	//console.log("RUNNING");
+	//for (var i = 0; i < sections.length; i++) {
+	//	console.log("sections length", i, sections[i].length);
+	//}
 	//new obj to store both decelerations
 	var returnDecelObj = {};
 
@@ -197,9 +199,11 @@ calcDecel: function(speed, playerX, playerZ) {
 		var diffX = playerXsections[i][playerXsections[i].length-1] - playerXsections[i][0];
 		var diffZ = playerZsections[i][playerZsections[i].length-1] - playerZsections[i][0];
 		var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffZ, 2));
-
-		var time = sections.length * DATA_RATE;
+		//console.log("distance", distance);
+		var time = sections[i].length * DATA_RATE;
+		//console.log("time", time);
 		var decelDistance = distance / (Math.pow(time, 2));
+		//console.log("decelDistanceBased", decelDistance);
 		decelDistanceBased.push(decelDistance);
 	}
 
