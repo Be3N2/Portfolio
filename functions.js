@@ -214,7 +214,7 @@ calcDecel: function(speed, playerX, playerZ) {
 },
 
 //takes playerX array, playerZ array, nodeX array, nodeZ array returns an array of lateral distances
-lateralPosition: function(playerX_Array, playerZ_Array, nodeX_Array, nodeZ_Array) {
+lateralPosition: function(playerX_Array, playerZ_Array, nodeX_Array, nodeZ_Array, ifTurned, intersection) {
 
 	//return array
 	var lateralDistance = [];
@@ -288,14 +288,30 @@ lateralPosition: function(playerX_Array, playerZ_Array, nodeX_Array, nodeZ_Array
 	var validArray = lateralDistance.slice(lastUnknown+1, lateralDistance.length);
 
 	var returnObj = {};
+	returnObj["Start"] = lastUnknown+1; 
 	returnObj["LateralPos"] = validArray;
-	returnObj["MeanLateral"] = this.mean(validArray);
-	returnObj["SDLP"] = this.standardDev(validArray);
+	if (ifTurned) returnObj["LateralPos"] = this.removeLateralInIntersection(returnObj, intersection);
+	returnObj["MeanLateral"] = this.mean(returnObj["LateralPos"]);
+	returnObj["SDLP"] = this.standardDev(returnObj["LateralPos"]);
 
 	return returnObj;
 	////console.log("Lateral position array", validArray);
 	//console.log("Mean of lateral position", mean(validArray));
 	//console.log("Standard deviation of lateral position", standardDev(validArray));
+},
+//if turnin remove lateral turn data
+removeLateralInIntersection: function (lateralObj, intersection) {
+	var startIntersection = 0;
+	while(intersection[startIntersection] != 1) {
+		startIntersection++;
+	}
+	
+	startIntersectionInLateral = startIntersection - lateralObj.Start;
+	if (startIntersectionInLateral >= 0) {
+		lateralObj.LateralPos = lateralObj.LateralPos.slice(0, startIntersectionInLateral); 
+	} 
+	
+	return lateralObj.LateralPos;
 },
 
 scaleValues: function(minV, maxV, value) {
