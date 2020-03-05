@@ -7,7 +7,7 @@ var precision = 3;
 //d3 important values
 window.w = 800;
 window.h = 300;
-let padding = 30;
+let padding = 50;
 
 $("#Search").click(function() {
 	var ParticipantID = $("#ParticipantID").val();
@@ -181,8 +181,15 @@ function drawAxis(chart, length, min, max) {
 	chart.append('g')
 		.attr('transform', 'translate('+ padding+',0)')
 		.call(yAxis);
+	chart.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 7)
+		.attr("x",0 - (h / 2))
+		.attr("dy", "1em")
+		.style("text-anchor", "middle")
+		.text("Speed Mph");  
 
-	xAxis.tickSize((-1 * h) + padding);
+	xAxis.tickSize(-1 * (h - padding * 2));
 	xAxis.ticks(parseInt(length*0.15));
 	//xAxis.tickFormat((d, i) => {return d + "s"});
 
@@ -190,6 +197,12 @@ function drawAxis(chart, length, min, max) {
 	      .attr("transform", "translate(0," + (h-padding )+ ")")
 	      .attr("class", "secondTicks")
 	      .call(xAxis);
+	chart.append("text")             
+		  .attr("transform",
+		        "translate(" + (w / 2) + " ," + (h - 20) + ")")
+		  .style("text-anchor", "middle")
+		  .text("Seconds");
+
 	g.selectAll(".tick:first-of-type text").remove();
 	g.selectAll(".tick:last-of-type text").remove();
 }
@@ -205,6 +218,14 @@ function drawSteeringAxis(chart, data, min, max) {
 
 	var yAxis = d3.axisRight()
 			.scale(yScale);
+
+	chart.append("text")
+		.attr("transform", "rotate(90)")
+		.attr("y", 0 - w)
+		.attr("x", h / 2)
+		.attr("dy", "1em")
+		.style("text-anchor", "middle")
+		.text("Steering Scale");  
 
 	chart.append("path")
 		      .datum(data)
