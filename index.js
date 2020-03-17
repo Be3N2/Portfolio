@@ -3,8 +3,11 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const multer = require('multer');
-const upload = multer();
+const upload = multer({dest: 'uploads/'});
 const coreFunctions = require("./functions");
+var fs = require('fs');
+const readFile = require('fs').readFile;
+var csvtojson = require("csvtojson");
 
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://"+ process.env.DB_USER + ":"+ process.env.DB_PASS +"@cluster0-fxflw.mongodb.net/test?retryWrites=true&w=majority";
@@ -30,41 +33,45 @@ app.get('/', (request, response) => {
  	response.sendFile('public/index.html');
 });
 
-//going to be the fileupload 
-app.get('/test', (request, response) => {
-	//response.send("Route Currently Deactivatd");
-	
-	var separatedData = coreFunctions.processData(test);
-	//response.send(separatedData);
-	for (var i = 0; i < separatedData.length; i++) {
-		separatedData[i]["DecelData"] = coreFunctions.calcDecel(separatedData[i]["Speed"], separatedData[i]["Player PositionX"], separatedData[i]["Player PositionZ"]);
-		separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
-		separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["Current/Next-Node-Pos-X"],separatedData[i]["Current/Next-Node-Pos-Z"],separatedData[i]["SteeringData"].start.length,separatedData[i]["Intersection"]);
-		separatedData[i]["Participant ID"] = 1;
-	}
-
-	//response.send(separatedData);
-
-	
-	var collection = db.collection("data");
-	var promise = collection.insertMany(separatedData);
-
-	promise.then((result) => {
-		console.log(`Successfully n items inserted: ${result.insertedCount}`)
-		response.send("Success");	
-	})
-	.catch((err) => {
-		console.error(`Failed to insert item: ${err}`)
-		response.send("Failed");
-	});
-	
-});
+var nextID = 1;
 
 app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
-  console.log(request.file.encoding);
-  var sizeObj = {"name": request.file.originalname, "size": request.file.size};
-  response.send(sizeObj);
-  // req.body will hold the text fields, if there were any 
+	var fileupload = request.file;
+	var extension = fileupload.originalname.substr(fileupload.originalname.length - 4);
+	if (fileupload.encoding === "7bit" && fileupload.mimetype === "application/octet-stream" && extension === ".csv") {
+		csvtojson()
+			.fromFile(request.file.path)
+			.then((jsonObj)=>{
+				//in a row format, needs combined to arrays...
+				jsonObj = combine(jsonObj);
+				var separatedData = coreFunctions.processData(jsonObj);
+
+				//response.send(separatedData);
+				for (var i = 0; i < separatedData.length; i++) {
+					separatedData[i]["DecelData"] = coreFunctions.calcDecel(separatedData[i]["Speed"], separatedData[i]["Player PositionX"], separatedData[i]["Player PositionZ"]);
+					separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
+					separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["CurrentNodeX"],separatedData[i]["CurrentNodeZ"],separatedData[i]["SteeringData"].start.length,separatedData[i]["Intersection"]);
+					separatedData[i]["Participant ID"] = nextID;
+				}
+
+				//response.send(separatedData);
+				
+				var collection = db.collection("data");
+				var promise = collection.insertMany(separatedData);
+
+				promise.then((result) => {
+					console.log(`Successfully n items inserted: ${result.insertedCount}`)
+					nextID = nextID + 1;
+					response.send("Success to view the results go to /display and look up ID" + nextID-1);	
+				})
+				.catch((err) => {
+					console.error(`Failed to insert item: ${err}`)
+					response.send("Failed");
+				});
+				
+			})
+
+	}
 });
 
 app.get('/upload', (request, response) => {
@@ -87,7 +94,32 @@ app.get('/lookup/',  (request, response) => {
 
 });
 
-function validate(fileupload) {
-	console.log(fileupload.encoding);
-
+function combine(json) {
+	var returnObj = {
+		"Fail Time": [],
+		"Speed": [],
+		"Brake": [],
+		"Steering": [],
+		"Player PositionX": [],
+		"Player PositionZ": [],
+		"Intersection": [],
+		"Priority At Intersection": [],
+		"Angle": [],
+		"CurrentNodeX": [],
+		"CurrentNodeZ": []
+	}
+	for (var i = 0; i < json.length; i++) {
+		returnObj["Fail Time"].push(json[i]["Fail Time"]);
+		returnObj["Speed"].push(json[i]["Speed"]);
+		returnObj["Brake"].push(json[i]["Brake"]);
+		returnObj["Steering"].push(json[i]["Steering"]);
+		returnObj["Player PositionX"].push(json[i]["Player PositionX"]);
+		returnObj["Player PositionZ"].push(json[i]["Player PositionZ"]);
+		returnObj["Intersection"].push(json[i]["Intersection"]);
+		returnObj["Priority At Intersection"].push(json[i]["Priority At Intersection"]);
+		returnObj["Angle"].push(json[i]["Angle"]);
+		returnObj["CurrentNodeX"].push(json[i]["CurrentNodeX"]);
+		returnObj["CurrentNodeZ"].push(json[i]["CurrentNodeZ"]);
+	}
+	return returnObj;
 }

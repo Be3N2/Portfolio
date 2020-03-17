@@ -4,6 +4,7 @@
   "description": "Personal portfolio connected to my website.",
   "main": "index.js",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.16.2",
     "mongodb": "^3.5.2",
