@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Size</title>
+    <meta name="description" content="File Metadata Microservice">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+
+
+    <main>
+      <h1>
+        File Metadata Microservice
+      </h1>
+
+      <hr>
+      
+      <h3>
+        Upload a file to get its file size. 
+      </h3>
+      
+      <!-- Multer will not accept it without enctype being set -->
+      <form method="post" enctype="multipart/form-data" action="/file-upload">
+        <input type="file" name="fileUpload"/>
+        <input type="submit"/>
+      </form>
+      
+      <br>
+      <p style="max-width: 500px; margin: 0 auto; line-height: 1.5">
+        After uploading a file and submitting the response will include a json object with file name and size in bytes.
+        <br>Ex: { "name": "largePhoto.JPG", "size": 1663142} <br>Project made with multer library for file management. 
+      </p>
+
+      <br>
+      <hr>
+
+      <p>
+        Project made by Ben Wakefield for <a href="https://www.freecodecamp.org/be3n2">Freecodecamp</a>.
+        Source code and more info available on <a href="https://github.com/Be3N2/File-Metadata-Node">Github</a>.
+        <br>Documentation on the <a href="https://www.npmjs.com/package/multer"> multer</a> library.
+      </p>
+    </main>
+
+  </body>
+</html>
