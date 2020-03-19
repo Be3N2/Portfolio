@@ -25,6 +25,7 @@
       <!-- Multer will not accept it without enctype being set -->
       <form method="post" enctype="multipart/form-data" action="/file-upload">
         <input type="file" name="fileUpload"/>
+        <input type="number" id="id" name="idNum" min="1" max="100" placeholder="id">
         <input type="submit"/>
       </form>
       

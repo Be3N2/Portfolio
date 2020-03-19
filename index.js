@@ -33,10 +33,9 @@ app.get('/', (request, response) => {
  	response.sendFile('public/index.html');
 });
 
-var nextID = 1;
-
 app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
 	var fileupload = request.file;
+	var id = request.body.idNum;
 	var extension = fileupload.originalname.substr(fileupload.originalname.length - 4);
 	if (fileupload.encoding === "7bit" && fileupload.mimetype === "application/octet-stream" && extension === ".csv") {
 		csvtojson()
@@ -44,24 +43,21 @@ app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
 			.then((jsonObj)=>{
 				//in a row format, needs combined to arrays...
 				jsonObj = combine(jsonObj);
+				
 				var separatedData = coreFunctions.processData(jsonObj);
-
-				//response.send(separatedData);
+				
 				for (var i = 0; i < separatedData.length; i++) {
 					separatedData[i]["DecelData"] = coreFunctions.calcDecel(separatedData[i]["Speed"], separatedData[i]["Player PositionX"], separatedData[i]["Player PositionZ"]);
 					separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
 					separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["CurrentNodeX"],separatedData[i]["CurrentNodeZ"],separatedData[i]["SteeringData"].start.length,separatedData[i]["Intersection"]);
-					separatedData[i]["Participant ID"] = nextID;
+					separatedData[i]["Participant ID"] = id;
 				}
 
-				//response.send(separatedData);
-				
 				var collection = db.collection("data");
 				var promise = collection.insertMany(separatedData);
 
 				promise.then((result) => {
 					console.log(`Successfully n items inserted: ${result.insertedCount}`)
-					nextID = nextID + 1;
 					response.send("Success to view the results go to /display and look up ID" + nextID-1);	
 				})
 				.catch((err) => {
