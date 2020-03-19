@@ -50,15 +50,16 @@ app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
 					separatedData[i]["DecelData"] = coreFunctions.calcDecel(separatedData[i]["Speed"], separatedData[i]["Player PositionX"], separatedData[i]["Player PositionZ"]);
 					separatedData[i]["SteeringData"] = coreFunctions.genCurvesAndError(separatedData[i]["Steering"]);
 					separatedData[i]["LateralData"] = coreFunctions.lateralPosition(separatedData[i]["Player PositionX"],separatedData[i]["Player PositionZ"],separatedData[i]["CurrentNodeX"],separatedData[i]["CurrentNodeZ"],separatedData[i]["SteeringData"].start.length,separatedData[i]["Intersection"]);
-					separatedData[i]["Participant ID"] = id;
+					separatedData[i]["Participant ID"] = parseInt(id);
 				}
-
+				//response.send(separatedData);
+				
 				var collection = db.collection("data");
 				var promise = collection.insertMany(separatedData);
 
 				promise.then((result) => {
 					console.log(`Successfully n items inserted: ${result.insertedCount}`)
-					response.send("Success to view the results go to /display and look up ID" + nextID-1);	
+					response.send("Success to view the results go to /display and look up ID");	
 				})
 				.catch((err) => {
 					console.error(`Failed to insert item: ${err}`)
