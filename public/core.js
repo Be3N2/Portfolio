@@ -127,7 +127,7 @@ $("#failTimeSelector").change(function() {
 	var $failData = $(".failTimeData");
 
 	$failData.toggle(true);
-	$failData.find(".meanDecelFPS").text(loadedData[selectedNum]["DecelData"]["meanDecelSpeedBased"].toFixed(precision));
+	if (loadedData[selectedNum]["DecelData"]["meanDecelSpeedBased"]) $failData.find(".meanDecelFPS").text(loadedData[selectedNum]["DecelData"]["meanDecelSpeedBased"].toFixed(precision));
 	$failData.find(".meanDecelMPS").text(loadedData[selectedNum]["DecelData"]["meanDecelDistanceBased"].toFixed(precision));
 	$failData.find(".meanLateral").text(loadedData[selectedNum]["LateralData"]["MeanLateral"].toFixed(precision));
 	$failData.find(".stdLateral").text(loadedData[selectedNum]["LateralData"]["SDLP"].toFixed(precision));
