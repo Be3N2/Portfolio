@@ -34,8 +34,7 @@ app.get('/', (request, response) => {
 });
 
 app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
-	response.send("Data upload disabled at this time");
-	/*
+	//response.send("Data upload disabled at this time");
 	var fileupload = request.file;
 	var id = request.body.idNum;
 	var extension = fileupload.originalname.substr(fileupload.originalname.length - 4);
@@ -71,7 +70,6 @@ app.post('/file-upload', upload.single('fileUpload'), (request, response) => {
 			})
 
 	}
-	*/
 });
 
 app.get('/upload', (request, response) => {

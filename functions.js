@@ -117,7 +117,7 @@ processData: function(testData) {
 
 	}
 	var objArray = [];
-	for (var i = 0; i < testData["Speed"].length; i++) {
+	for (var i = 0; i < splitPoints.length; i++) {
 		let obj = {};
 		for (key in testData) {
 			obj[key] = testData[key].shift();
